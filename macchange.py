@@ -1,5 +1,6 @@
 import subprocess
 import optparse
+import re
 
 
 def enter():
@@ -16,5 +17,21 @@ def mac_changing(interface_name, mac_addr):
     subprocess.call(["ifconfig", interface_name, "up"])
 
 
+def get_old_mac_addr(interface):
+    ifconfig = subprocess.check_output(["ifconfig", interface])
+    new_mac_addr = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w:",
+                             ifconfig)  # w herhangi bir karakter anlamına gelir herhangi iki karakter ardından : olanalrı filtreler
+    if new_mac_addr:
+        return new_mac_addr.group(0)
+    else:
+        return None
+
+
 (user_input, args) = enter()
 mac_changing(user_input.interface, user_input.mac_address)
+old_mac_addr = get_old_mac_addr(user_input.interface)
+
+if old_mac_addr == user_input.mac_address:
+    print("Successful")
+else:
+    print("Failed")
