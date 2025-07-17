@@ -17,10 +17,10 @@ def mac_changing(interface_name, mac_addr):
     subprocess.call(["ifconfig", interface_name, "up"])
 
 
+# noinspection PyTypeChecker
 def get_old_mac_addr(interface):
     ifconfig = subprocess.check_output(["ifconfig", interface])
-    new_mac_addr = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w:",
-                             ifconfig)  # w herhangi bir karakter anlamına gelir herhangi iki karakter ardından : olanalrı filtreler
+    new_mac_addr = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w:", ifconfig)  # w herhangi bir karakter anlamına gelir herhangi iki karakter ardından : olanalrı filtreler
     if new_mac_addr:
         return new_mac_addr.group(0)
     else:
